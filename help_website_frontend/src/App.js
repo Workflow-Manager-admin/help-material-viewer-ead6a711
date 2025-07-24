@@ -136,7 +136,10 @@ function Sidebar({ topics, currentId, onSelect, filterText }) {
   );
 }
 
-// Main content panel
+/**
+ * Main content panel for displaying help topics.
+ * Adds a placeholder image at the top of each help/article section.
+ */
 function HelpContent({ topicId }) {
   const html = useMemo(() => {
     // Simple content handling
@@ -151,7 +154,15 @@ function HelpContent({ topicId }) {
   }, [topicId]);
   return (
     <div className="kv-main-content">
-      <article dangerouslySetInnerHTML={html} />
+      <article>
+        {/* PUBLIC_INTERFACE: Display dummy/placeholder image at top of section */}
+        <img
+          src="https://via.placeholder.com/400x200?text=Dummy+Image"
+          alt="Dummy section banner"
+          style={{ display: "block", margin: "0 auto 2rem auto", width: "100%", maxWidth: 400, borderRadius: 8, border: "1.5px dashed #bbb" }}
+        />
+        <span dangerouslySetInnerHTML={html} />
+      </article>
     </div>
   );
 }
