@@ -138,20 +138,30 @@ function Sidebar({ topics, currentId, onSelect, filterText }) {
 
 /**
  * Main content panel for displaying help topics.
- * Adds a placeholder image at the top of each help/article section.
+ * Adds a placeholder image at the top of each help/article section and an additional illustration image within the section.
  */
 function HelpContent({ topicId }) {
-  const html = useMemo(() => {
-    // Simple content handling
+  const htmlWithIllustration = useMemo(() => {
     const raw = HELP_CONTENT[topicId] || "";
-    const html = raw
+    // Build the HTML with an illustration placeholder image after the first paragraph
+    const lines = raw
       .split("\n")
       .map(l => l.trim())
-      .filter(Boolean)
-      .map((line, i) => `<p key=${i}>${line}</p>`)
-      .join("");
-    return { __html: html };
+      .filter(Boolean);
+
+    let injected = [];
+    lines.forEach((line, i) => {
+      // Insert illustration image after the first content paragraph
+      injected.push(`<p key=${i}>${line}</p>`);
+      if (i === 0) {
+        injected.push(
+          `<div style="text-align:center; margin:24px 0;"><img src="https://via.placeholder.com/320x120?text=Illustration+Placeholder" alt="Illustration Placeholder" style="max-width:320px; width:100%; border:1.5px dashed #888; border-radius:6px;"/><div style="color:#666;font-size:0.97rem; margin-top:6px;">Illustration Placeholder</div></div>`
+        );
+      }
+    });
+    return { __html: injected.join("") };
   }, [topicId]);
+
   return (
     <div className="kv-main-content">
       <article>
@@ -161,7 +171,7 @@ function HelpContent({ topicId }) {
           alt="Dummy section banner"
           style={{ display: "block", margin: "0 auto 2rem auto", width: "100%", maxWidth: 400, borderRadius: 8, border: "1.5px dashed #bbb" }}
         />
-        <span dangerouslySetInnerHTML={html} />
+        <span dangerouslySetInnerHTML={htmlWithIllustration} />
       </article>
     </div>
   );
